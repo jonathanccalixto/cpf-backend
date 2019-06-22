@@ -1,0 +1,16 @@
+{
+  "name": "maxmilias-cpf-backend",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@gitlab.com:maxmilias/cpf-backend.git",
+  "author": "Jonathan C. Calixto <jonathanccalixto@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "start": "nodemon index.js",
+    "test": "jest --watchAll --verbose"
+  },
+  "devDependencies": {
+    "jest": "^24.8.0",
+    "nodemon": "^1.19.1"
+  }
+}

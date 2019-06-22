@@ -1,0 +1,36 @@
+version: "3"
+
+services:
+  database:
+    image: mongo
+    ports:
+      - "27017:27017"
+
+  app:
+    build: .
+    ports:
+      - "4000:4000"
+    environment:
+      - DB_HOST=database
+      - DB_PORT=27017
+      - DB_NAME=maxmilhas-cpf
+      - PORT=4000
+      - HOST=0.0.0.0
+    command: yarn start
+    depends_on:
+      - database
+    volumes:
+      - ".:/usr/app"
+
+  test:
+    build: .
+    environment:
+      - NODE_ENV=test
+      - DB_HOST=database
+      - DB_PORT=27017
+      - DB_NAME=maxmilhas-cpf
+    command: yarn test
+    depends_on:
+      - database
+    volumes:
+      - ".:/usr/app"
