@@ -8,5 +8,6 @@ const controllers = require('../app/controllers')
 const { CpfBlacklistController } = controllers
 routes.get('/cpf/status', handle(CpfBlacklistController.status))
 routes.post('/cpf/add', handle(CpfBlacklistController.add))
+routes.delete('/cpf/remove', handle(CpfBlacklistController.remove))
 
 module.exports = routes

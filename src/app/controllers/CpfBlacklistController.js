@@ -8,7 +8,12 @@ class CpfBlacklistController {
 
   async add (req, res) {
     const { cpf } = req.body
-    return res.status(203).json(await CpfBlacklist.add({ cpf }))
+    return res.status(201).json(await CpfBlacklist.add({ cpf }))
+  }
+
+  async remove (req, res) {
+    const { cpf } = req.body
+    return res.json(await CpfBlacklist.remove({ cpf }))
   }
 }
 
