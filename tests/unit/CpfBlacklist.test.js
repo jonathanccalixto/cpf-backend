@@ -14,7 +14,7 @@ describe('CpfBlacklist', () => {
       await expect(addFunction()).rejects.toThrow(RecordInvalidError)
     })
 
-    it('throws exception when cpf already added in blacklist', async () => {
+    it('throws exception when cpf already blacklisted', async () => {
       const addFunction = async () => {
         const cpf = CPF.generate(true)
         await CpfBlacklist.add({ cpf })
@@ -25,6 +25,14 @@ describe('CpfBlacklist', () => {
 
     it('returns blacklist item when cpf is register', async () => {
       const cpf = CPF.generate(true)
+      const result = await CpfBlacklist.add({ cpf })
+      expect(result).toMatchObject({ cpf, removedAt: null })
+    })
+
+    it('returns blacklist item when cpf already was blacklisted', async () => {
+      const cpf = CPF.generate(true)
+      await CpfBlacklist.add({ cpf })
+      await CpfBlacklist.remove({ cpf })
       const result = await CpfBlacklist.add({ cpf })
       expect(result).toMatchObject({ cpf, removedAt: null })
     })

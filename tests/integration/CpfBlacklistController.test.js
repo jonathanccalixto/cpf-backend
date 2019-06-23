@@ -3,8 +3,8 @@ const CPF = require('@fnando/cpf/dist/node')
 const request = require('../jest_helper')
 const { CpfBlacklist } = require('../../src/app/models')
 
-describe('/cpf', () => {
-  describe('GET /status', () => {
+describe('CpfBlacklistController', () => {
+  describe('status: GET /cpf/status', () => {
     it('responds FREE when it sends a valid cpf that is not blacklisted', async () => {
       const cpf = CPF.generate(true)
       const { status, body } = await request()
@@ -58,6 +58,72 @@ describe('/cpf', () => {
 
     it('responds with cpf not allowed when not sending cpf', async () => {
       const { status, body } = await request().get('/cpf/status')
+
+      expect(status).toBe(400)
+      expect(body).toMatchObject({
+        message: 'One or more validation errors occurred:',
+        fields: ['"cpf" is not allowed to be empty']
+      })
+    })
+  })
+
+  describe('add: POST /cpf/add', () => {
+    it('responds with the cpf`s data when cpf is valid and no blacklisted', async () => {
+      const cpf = CPF.generate(true)
+      const { status, body } = await request()
+        .post('/cpf/add')
+        .send({ cpf })
+
+      expect(status).toBe(203)
+      expect(body).toMatchObject({ cpf, removedAt: null })
+    })
+
+    it('responds with the cpf`s data when cpf is valid and was blacklisted', async () => {
+      const cpf = CPF.generate(true)
+
+      await CpfBlacklist.add({ cpf })
+      await CpfBlacklist.remove({ cpf })
+
+      const { status, body } = await request()
+        .post('/cpf/add')
+        .send({ cpf })
+
+      expect(status).toBe(203)
+      expect(body).toMatchObject({ cpf, removedAt: null })
+    })
+
+    it('responds with cpf already added when cpf is valid and blacklisted', async () => {
+      const cpf = CPF.generate(true)
+
+      await CpfBlacklist.add({ cpf })
+
+      const { status, body } = await request()
+        .post('/cpf/add')
+        .send({ cpf })
+
+      expect(status).toBe(400)
+      expect(body).toMatchObject({
+        message: 'One or more validation errors occurred:',
+        fields: ['"cpf" was added in blacklist']
+      })
+    })
+
+    it('responds with invalid cpf when cpf is valid and blacklisted', async () => {
+      const cpf = '638.174.677-71'
+
+      const { status, body } = await request()
+        .post('/cpf/add')
+        .send({ cpf })
+
+      expect(status).toBe(400)
+      expect(body).toMatchObject({
+        message: 'One or more validation errors occurred:',
+        fields: ['"cpf" is invalid']
+      })
+    })
+
+    it('responds with cpf not allowed when cpf is valid and blacklisted', async () => {
+      const { status, body } = await request().post('/cpf/add')
 
       expect(status).toBe(400)
       expect(body).toMatchObject({
