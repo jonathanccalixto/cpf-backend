@@ -1,12 +1,9 @@
-const RecordNotFoundError = function (message) {
-  this.name = 'RecordNotFoundError'
-  this.message = message || 'Record not found!'
-  this.stack = new Error().stack
+module.exports = class RecordNotFoundError extends Error {
+  constructor (message, validations) {
+    super(message || 'Record not found!')
+    Error.captureStackTrace(this, RecordNotFoundError)
+  }
+  toJSON () {
+    return { message: this.message }
+  }
 }
-RecordNotFoundError.prototype = Object.create(RecordNotFoundError.prototype)
-RecordNotFoundError.prototype.constructor = RecordNotFoundError
-RecordNotFoundError.prototype.toJSON = function () {
-  return { message: this.message }
-}
-
-module.exports = RecordNotFoundError

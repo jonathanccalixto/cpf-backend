@@ -7,12 +7,16 @@ const { RecordInvalidError } = require('../exceptions')
 
 const model = mongoose.model('CpfBlacklist', CpfBlacklistSchema)
 
+const throwsRecordInvalidError = ({ message, fields }) => {
+  throw new RecordInvalidError(message, fields)
+}
+
 const valid = attributes => {
   const { error } = Joi.validate(attributes, { cpf: Joi.document().cpf() })
 
   if (error) {
-    throw new RecordInvalidError('Record is invalid!', {
-      validations: error.details.map(({ message }) => message).join(', ')
+    throwsRecordInvalidError({
+      fields: error.details.map(({ message }) => message)
     })
   }
 }
@@ -25,9 +29,7 @@ module.exports = {
     const instance = await model.findOne({ document: cpf, removedAt: null })
 
     if (instance) {
-      throw new RecordInvalidError('Record is invalid!', {
-        validations: 'cpf was added in blacklist'
-      })
+      throwsRecordInvalidError({ fields: ['"cpf" was added in blacklist'] })
     }
 
     const { document, removedAt, createdAt, updatedAt } = await model.create({
@@ -44,9 +46,7 @@ module.exports = {
     const instance = await model.findOne({ document: cpf }).sort('-createdAt')
 
     if (!instance || instance.removedAt) {
-      throw new RecordInvalidError('Record is invalid!', {
-        validations: 'cpf was not added in blacklist'
-      })
+      throwsRecordInvalidError({ fields: ['"cpf" was not added in blacklist'] })
     }
 
     instance.removedAt = new Date()

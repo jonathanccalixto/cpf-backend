@@ -7,5 +7,6 @@ const getPort = (min, max) => {
 }
 
 module.exports = () => {
-  server: app.listen(getPort(60000, 65536))
+  const getServer = () => app.listen(getPort(60000, 65536))
+  return require('supertest')(getServer())
 }

@@ -3,7 +3,7 @@ const helmet = require('helmet')
 const mongoose = require('mongoose')
 const morgan = require('morgan')
 const Youch = require('youch')
-const { RecordNotFoundError } = require('./app/exceptions')
+const { RecordNotFoundError, RecordInvalidError } = require('./app/exceptions')
 
 class App {
   constructor () {
@@ -39,9 +39,8 @@ class App {
 
   exception () {
     this.express.use(async (err, req, res, next) => {
-      if (err instanceof RecordNotFoundError) {
-        return res.status(404).json(err)
-      }
+      if (err instanceof RecordNotFoundError) return res.status(404).json(err)
+      if (err instanceof RecordInvalidError) return res.status(400).json(err)
 
       if (this.env() !== 'production') {
         const youch = new Youch(err, req)
