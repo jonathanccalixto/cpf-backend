@@ -1,13 +1,18 @@
 const CPF = require('@fnando/cpf/dist/node')
 
-const request = require('../jest_helper')
+const { request, getServer } = require('../jest_helper')
 const { CpfBlacklist } = require('../../src/app/models')
 
+let server
+
 describe('CpfBlacklistController', () => {
+  beforeEach(() => (server = getServer()))
+  afterEach(() => server.close())
+
   describe('status: GET /cpf/status', () => {
     it('responds FREE when it sends a valid cpf that is not blacklisted', async () => {
       const cpf = CPF.generate(true)
-      const { status, body } = await request()
+      const { status, body } = await request(server)
         .get('/cpf/status')
         .query({ cpf })
 
@@ -21,7 +26,7 @@ describe('CpfBlacklistController', () => {
       await CpfBlacklist.add({ cpf })
       await CpfBlacklist.remove({ cpf })
 
-      const { status, body } = await request()
+      const { status, body } = await request(server)
         .get('/cpf/status')
         .query({ cpf })
 
@@ -34,7 +39,7 @@ describe('CpfBlacklistController', () => {
 
       await CpfBlacklist.add({ cpf })
 
-      const { status, body } = await request()
+      const { status, body } = await request(server)
         .get('/cpf/status')
         .query({ cpf })
 
@@ -45,7 +50,7 @@ describe('CpfBlacklistController', () => {
     it('responds with invalid cpf when sending an invalid cpf', async () => {
       const cpf = '638.174.677-71'
 
-      const { status, body } = await request()
+      const { status, body } = await request(server)
         .get('/cpf/status')
         .query({ cpf })
 
@@ -57,7 +62,7 @@ describe('CpfBlacklistController', () => {
     })
 
     it('responds with cpf not allowed when not sending cpf', async () => {
-      const { status, body } = await request().get('/cpf/status')
+      const { status, body } = await request(server).get('/cpf/status')
 
       expect(status).toBe(400)
       expect(body).toMatchObject({
@@ -70,7 +75,7 @@ describe('CpfBlacklistController', () => {
   describe('add: POST /cpf/add', () => {
     it('responds with the cpf`s data when cpf is valid and no blacklisted', async () => {
       const cpf = CPF.generate(true)
-      const { status, body } = await request()
+      const { status, body } = await request(server)
         .post('/cpf/add')
         .send({ cpf })
 
@@ -84,7 +89,7 @@ describe('CpfBlacklistController', () => {
       await CpfBlacklist.add({ cpf })
       await CpfBlacklist.remove({ cpf })
 
-      const { status, body } = await request()
+      const { status, body } = await request(server)
         .post('/cpf/add')
         .send({ cpf })
 
@@ -97,7 +102,7 @@ describe('CpfBlacklistController', () => {
 
       await CpfBlacklist.add({ cpf })
 
-      const { status, body } = await request()
+      const { status, body } = await request(server)
         .post('/cpf/add')
         .send({ cpf })
 
@@ -111,7 +116,7 @@ describe('CpfBlacklistController', () => {
     it('responds with invalid cpf when cpf is valid and blacklisted', async () => {
       const cpf = '638.174.677-71'
 
-      const { status, body } = await request()
+      const { status, body } = await request(server)
         .post('/cpf/add')
         .send({ cpf })
 
@@ -123,7 +128,7 @@ describe('CpfBlacklistController', () => {
     })
 
     it('responds with cpf not allowed when cpf is valid and blacklisted', async () => {
-      const { status, body } = await request().post('/cpf/add')
+      const { status, body } = await request(server).post('/cpf/add')
 
       expect(status).toBe(400)
       expect(body).toMatchObject({
@@ -139,7 +144,7 @@ describe('CpfBlacklistController', () => {
 
       await CpfBlacklist.add({ cpf })
 
-      const { status, body } = await request()
+      const { status, body } = await request(server)
         .delete('/cpf/remove')
         .send({ cpf })
 
@@ -151,7 +156,7 @@ describe('CpfBlacklistController', () => {
     it('responds with the cpf no blacklisted when cpf is valid and no blacklisted', async () => {
       const cpf = CPF.generate(true)
 
-      const { status, body } = await request()
+      const { status, body } = await request(server)
         .delete('/cpf/remove')
         .send({ cpf })
 
@@ -168,7 +173,7 @@ describe('CpfBlacklistController', () => {
       await CpfBlacklist.add({ cpf })
       await CpfBlacklist.remove({ cpf })
 
-      const { status, body } = await request()
+      const { status, body } = await request(server)
         .delete('/cpf/remove')
         .send({ cpf })
 
@@ -182,7 +187,7 @@ describe('CpfBlacklistController', () => {
     it('responds with invalid cpf when cpf is valid and blacklisted', async () => {
       const cpf = '638.174.677-71'
 
-      const { status, body } = await request()
+      const { status, body } = await request(server)
         .delete('/cpf/remove')
         .send({ cpf })
 
@@ -194,7 +199,7 @@ describe('CpfBlacklistController', () => {
     })
 
     it('responds with cpf not allowed when cpf is valid and blacklisted', async () => {
-      const { status, body } = await request().delete('/cpf/remove')
+      const { status, body } = await request(server).delete('/cpf/remove')
 
       expect(status).toBe(400)
       expect(body).toMatchObject({

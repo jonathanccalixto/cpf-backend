@@ -4,6 +4,10 @@ const handle = require('express-async-handler')
 
 const controllers = require('../app/controllers')
 
+// UptimeController
+const { UptimeController } = controllers
+routes.get('/status', handle(UptimeController.status))
+
 // CpfBlacklistController
 const { CpfBlacklistController } = controllers
 routes.get('/cpf/status', handle(CpfBlacklistController.status))

@@ -3,11 +3,14 @@ const helmet = require('helmet')
 const mongoose = require('mongoose')
 const morgan = require('morgan')
 const Youch = require('youch')
+
 const { RecordNotFoundError, RecordInvalidError } = require('./app/exceptions')
+const { Uptime } = require('./app/models')
 
 class App {
   constructor () {
     this.express = express()
+
     this.database()
     this.middlewares()
     this.routes()
@@ -24,6 +27,8 @@ class App {
       .connect(connection, options)
       .then(message.success)
       .catch(message.failure)
+
+    Uptime.create()
   }
 
   middlewares () {

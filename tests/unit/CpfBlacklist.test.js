@@ -1,6 +1,6 @@
-const CPF = require('@fnando/cpf/dist/node')
+require('../jest_helper').getServer()
 
-require('../jest_helper.js')()
+const CPF = require('@fnando/cpf/dist/node')
 
 const { CpfBlacklist } = require('../../src/app/models')
 const { RecordInvalidError } = require('../../src/app/exceptions')
