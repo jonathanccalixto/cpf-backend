@@ -5,7 +5,7 @@ const RecordNotFoundError = function (message) {
 }
 RecordNotFoundError.prototype = Object.create(RecordNotFoundError.prototype)
 RecordNotFoundError.prototype.constructor = RecordNotFoundError
-RecordNotFoundError.prototype.toJson = function () {
+RecordNotFoundError.prototype.toJSON = function () {
   return { message: this.message }
 }
 

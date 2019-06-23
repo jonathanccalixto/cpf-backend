@@ -10,10 +10,13 @@
     "test": "jest --watchAll --verbose"
   },
   "dependencies": {
+    "@fnando/cpf": "^0.1.1",
+    "@hapi/joi": "^15.0.3",
     "express": "^4.17.1",
     "helmet": "^3.18.0",
     "mongoose": "^5.6.0",
     "morgan": "^1.9.1",
+    "require-directory": "^2.1.1",
     "youch": "^2.0.10"
   },
   "devDependencies": {
