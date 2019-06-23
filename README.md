@@ -1,6 +1,9 @@
 # CPF backend
 
-Um servidor backend escrito em [nodejs](https://nodejs.org), para consulta de CPFs
+Um servidor backend escrito em [nodejs](https://nodejs.org), para consulta de CPFs.
+
+Neste sistema poderá consultar a situação de um cpf e adicionar ou remover um cpf de uma blacklist.
+Ao solicitar a remoção do cpf da blacklist, é realizado um exclusão lógica para realização de estatisticas do mesmo.
 
 - Versão do node
 
@@ -63,9 +66,9 @@ Após executar o docker, inicializará o servidor de aplicação, contendo os se
   - { message: '', fields: [ '' ]} se ocorreu algum erro de processamento, onde `message` é uma mensagem generica e `fields` é um array de mensagem relacionada aos campos validados. Ex: _{ "message": "One or more validation errors occurred:", "fields": [ "\"cpf\" is not allowed to be empty" ] }_
 - **POST /cpf/add**: recebe via `body` o paramentro `cpf` que será usado para adicionar o cpf na blacklist.
   Retorna:
-  - { "cpf": "", "removedAt": null, : "createdAt": "", "updatedAt": "" } sempre que um cpf é adicionando na blacklist. Exemplo: _{ "cpf": "638.174.677-70", "removedAt": null, "createdAt": "2019-06-23T19:43:54.103Z", "updatedAt": "2019-06-23T19:43:54.103Z" }_
-  - { message: '', fields: [ '' ]} se ocorreu algum erro de processamento, onde `message` é uma mensagem generica e `fields` é um array de mensagem relacionada aos campos validados. Ex: _{ "message": "One or more validation errors occurred:", "fields": [ "\"cpf\" was added in blacklist" ] }_
+  - `{ "cpf": "", "removedAt": null, : "createdAt": "", "updatedAt": "" }` sempre que um cpf é adicionando na blacklist. Exemplo: _{ "cpf": "638.174.677-70", "removedAt": null, "createdAt": "2019-06-23T19:43:54.103Z", "updatedAt": "2019-06-23T19:43:54.103Z" }_
+  - `{ message: '', fields: [ '' ]}` se ocorreu algum erro de processamento, onde `message` é uma mensagem generica e `fields` é um array de mensagem relacionada aos campos validados. Ex: _{ "message": "One or more validation errors occurred:", "fields": [ "\"cpf\" was added in blacklist" ] }_
 - **DELETE /cpf/remove**: recebe via `body` o paramentro `cpf` que será usado para adicionar o cpf na blacklist.
   Retorna:
-  - { "cpf": "", "removedAt": null, : "createdAt": "", "updatedAt": "" } sempre que um cpf é removido da blacklist. Exemplo: _{ "cpf": "638.174.677-70", "removedAt": "2019-06-23T19:48:31.465Z", "createdAt": "2019-06-23T19:43:54.103Z", "updatedAt": "2019-06-23T19:48:31.465Z" }_
-  - { message: '', fields: [ '' ]} se ocorreu algum erro de processamento, onde `message` é uma mensagem generica e `fields` é um array de mensagem relacionada aos campos validados. Ex: _{ "message": "One or more validation errors occurred:", "fields": [ "\"cpf\" was not added in blacklist" ] }_
+  - `{ "cpf": "", "removedAt": null, : "createdAt": "", "updatedAt": "" }` sempre que um cpf é removido da blacklist. Exemplo: _{ "cpf": "638.174.677-70", "removedAt": "2019-06-23T19:48:31.465Z", "createdAt": "2019-06-23T19:43:54.103Z", "updatedAt": "2019-06-23T19:48:31.465Z" }_
+  - `{ message: '', fields: [ '' ]}` se ocorreu algum erro de processamento, onde `message` é uma mensagem generica e `fields` é um array de mensagem relacionada aos campos validados. Ex: _{ "message": "One or more validation errors occurred:", "fields": [ "\"cpf\" was not added in blacklist" ] }_
