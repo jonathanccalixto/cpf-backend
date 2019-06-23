@@ -30,7 +30,9 @@ class App {
     this.express.use(express.json())
     this.express.use(express.urlencoded({ extended: true }))
     this.express.use(helmet())
-    this.express.use(morgan(this.env() === 'production' ? 'tiny' : 'dev'))
+    if (this.env() !== 'test') {
+      this.express.use(morgan(this.env() === 'production' ? 'tiny' : 'dev'))
+    }
   }
 
   routes () {
