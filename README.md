@@ -7,11 +7,11 @@ Ao solicitar a remoção do cpf da blacklist, é realizado um exclusão lógica 
 Poderá também consultar a data que o servidor foi iniciado, a quantidade de consultas realizadas neste periodo e a
 quantidade total de cpfs na blacklist.
 
-- Versão do node
+## Versão do node
 
 Este projeto utiliza a versão 8.16.0 do
 
-- Dependências do sistema
+## Dependências do sistema
 
 O sistema utiliza:
 
@@ -21,7 +21,7 @@ O sistema utiliza:
 - docker v18.09.6
 - docker-compose v1.24.0
 
-* Configuração
+## Configuração
 
 Para iniciar o projeto em desenvolvimento, basta instalar o docker e docker-compose, e executar o comando
 
@@ -41,7 +41,7 @@ para exibir os logs da aplicação, basta executar o seguinte comando após inic
   docker logs -f cpf-backend_app_1
 ```
 
-- Criação de banco de dados
+## Criação de banco de dados
 
 A aplicação utiliza o banco mongoDB, não precisa de ser criado. Tendo ele iniciado, basta utilizar.
 
@@ -57,7 +57,7 @@ Já existe um container do docker para executar os testes, mas caso precise ou q
   yarn test
 ```
 
-- endpoints
+## endpoints
 
 Após executar o docker, inicializará o servidor de aplicação, contendo os seguintes endpoints:
 
