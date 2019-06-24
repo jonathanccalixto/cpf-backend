@@ -4,6 +4,8 @@ Um servidor backend escrito em [nodejs](https://nodejs.org), para consulta de CP
 
 Neste sistema poderá consultar a situação de um cpf e adicionar ou remover um cpf de uma blacklist.
 Ao solicitar a remoção do cpf da blacklist, é realizado um exclusão lógica para realização de estatisticas do mesmo.
+Poderá também consultar a data que o servidor foi iniciado, a quantidade de consultas realizadas neste periodo e a
+quantidade total de cpfs na blacklist.
 
 - Versão do node
 
@@ -59,11 +61,16 @@ Já existe um container do docker para executar os testes, mas caso precise ou q
 
 Após executar o docker, inicializará o servidor de aplicação, contendo os seguintes endpoints:
 
-- **GET /cpf/status**: recebe via `query` o paramentro `cpf` que será usado para consultar o status do cpf.
+- **GET /status**: Uptime do servidor.
+  Retorna:
+  - `{ "startedAt": "", "queries": 0, "blacklists": 0 }` Exibe o status do servidor, onde `startedAt` é o momento que o servidor foi iniciado,
+    `queries` é quantidade de consultas ao status de cpf foi realidados apartir do momento que o servidor foi iniciado e
+    `blacklists` é a quantidade de cpfs que está na blacklist até o momento. Ex: _{ "startedAt": "2019-06-23T23:52:09.387Z", "queries": 0, "blacklists": 1 }_
+- **GET /cpf/status**: recebe via `query` o parâmetro `cpf` que será usado para consultar o status do cpf.
   Retorna:
   - **FREE** se não estiver na blacklist
   - **BLOCK** se estiver na blacklist
-  - { message: '', fields: [ '' ]} se ocorreu algum erro de processamento, onde `message` é uma mensagem generica e `fields` é um array de mensagem relacionada aos campos validados. Ex: _{ "message": "One or more validation errors occurred:", "fields": [ "\"cpf\" is not allowed to be empty" ] }_
+  - `{ message: '', fields: [ '' ]}` se ocorreu algum erro de processamento, onde `message` é uma mensagem generica e `fields` é um array de mensagem relacionada aos campos validados. Ex: _{ "message": "One or more validation errors occurred:", "fields": [ "\"cpf\" is not allowed to be empty" ] }_
 - **POST /cpf/add**: recebe via `body` o paramentro `cpf` que será usado para adicionar o cpf na blacklist.
   Retorna:
   - `{ "cpf": "", "removedAt": null, : "createdAt": "", "updatedAt": "" }` sempre que um cpf é adicionando na blacklist. Exemplo: _{ "cpf": "638.174.677-70", "removedAt": null, "createdAt": "2019-06-23T19:43:54.103Z", "updatedAt": "2019-06-23T19:43:54.103Z" }_
