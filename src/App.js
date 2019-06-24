@@ -3,6 +3,7 @@ const helmet = require('helmet')
 const mongoose = require('mongoose')
 const morgan = require('morgan')
 const Youch = require('youch')
+const cors = require('cors')
 
 const { RecordNotFoundError, RecordInvalidError } = require('./app/exceptions')
 const { Uptime } = require('./app/models')
@@ -34,6 +35,7 @@ class App {
   middlewares () {
     this.express.use(express.json())
     this.express.use(express.urlencoded({ extended: true }))
+    this.express.use(cors())
     this.express.use(helmet())
     if (this.env() !== 'test') {
       this.express.use(morgan(this.env() === 'production' ? 'tiny' : 'dev'))

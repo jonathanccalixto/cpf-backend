@@ -12,6 +12,7 @@
   "dependencies": {
     "@fnando/cpf": "^0.1.1",
     "@hapi/joi": "^15.0.3",
+    "cors": "^2.8.5",
     "express": "^4.17.1",
     "express-async-handler": "^1.1.4",
     "helmet": "^3.18.0",
