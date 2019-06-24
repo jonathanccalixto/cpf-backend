@@ -29,6 +29,16 @@ Para iniciar o projeto em desenvolvimento, basta instalar o docker e docker-comp
   docker-compose up -d
 ```
 
+### Como executar o conjunto de testes
+
+Já existe um container do docker para executar os testes, mas caso precise ou queira executar local seria:
+
+```bash
+  yarn test
+```
+
+### Logs do docker
+
 para exibir os logs do ambiente de teste, basta executar o seguinte comando após iniciar o docker:
 
 ```bash
@@ -45,17 +55,9 @@ para exibir os logs da aplicação, basta executar o seguinte comando após inic
 
 A aplicação utiliza o banco mongoDB, não precisa de ser criado. Tendo ele iniciado, basta utilizar.
 
-- Inicialização do banco de dados
+### Inicialização do banco de dados
 
 Na aplicação foi construido via docker, então basta executar o comando do docker compose que ele se inicializará.
-
-- Como executar o conjunto de testes
-
-Já existe um container do docker para executar os testes, mas caso precise ou queira executar local seria:
-
-```bash
-  yarn test
-```
 
 ## endpoints
 
