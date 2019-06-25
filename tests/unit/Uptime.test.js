@@ -4,10 +4,7 @@ const mongoose = require('mongoose')
 
 const { UptimeSchema, CpfBlacklistSchema } = require('../../src/db/schemas')
 const { Uptime } = require('../../src/app/models')
-const {
-  RecordInvalidError,
-  RecordNotFoundError
-} = require('../../src/app/exceptions')
+const { RecordInvalidError } = require('../../src/app/exceptions')
 
 const CpfBlacklistTable = mongoose.model('CpfBlacklist', CpfBlacklistSchema)
 const UptimeTable = mongoose.model('Uptime', UptimeSchema)
@@ -37,7 +34,7 @@ describe('CpfBlacklist', () => {
       const addQueryFunction = async () => {
         await Uptime.addQuery()
       }
-      await expect(addQueryFunction()).rejects.toThrow(RecordNotFoundError)
+      await expect(addQueryFunction()).rejects.toThrow(RecordInvalidError)
     })
 
     it('add query count when uptime exists', async () => {
@@ -55,7 +52,7 @@ describe('CpfBlacklist', () => {
       const addBlacklistFunction = async () => {
         await Uptime.addBlacklist()
       }
-      await expect(addBlacklistFunction()).rejects.toThrow(RecordNotFoundError)
+      await expect(addBlacklistFunction()).rejects.toThrow(RecordInvalidError)
     })
 
     it('add blacklist count when uptime exists', async () => {
@@ -74,7 +71,7 @@ describe('CpfBlacklist', () => {
         await Uptime.removeBlacklist()
       }
       await expect(removeBlacklistFunction()).rejects.toThrow(
-        RecordNotFoundError
+        RecordInvalidError
       )
     })
 

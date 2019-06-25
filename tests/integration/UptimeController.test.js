@@ -3,16 +3,16 @@ const { request, getServer } = require('../jest_helper')
 const mongoose = require('mongoose')
 
 const { Uptime } = require('../../src/app/models')
-const { UptimeSchema } = require('../../src/db/schemas')
+const { UptimeSchema, CpfBlacklistSchema } = require('../../src/db/schemas')
 
 const UptimeTable = mongoose.model('Uptime', UptimeSchema)
+const CpfBlacklistTable = mongoose.model('CpfBlacklist', CpfBlacklistSchema)
 
 let server
 
 describe('UptimeController', () => {
   beforeEach(async () => {
     server = getServer()
-    await UptimeTable.deleteMany({})
   })
   afterEach(async () => {
     await UptimeTable.deleteMany({})
@@ -21,6 +21,9 @@ describe('UptimeController', () => {
 
   describe('status: GET /status', () => {
     it('responds with a uptime data when uptime exists', async () => {
+      await UptimeTable.deleteMany({})
+      await CpfBlacklistTable.deleteMany({})
+
       await Uptime.create()
 
       const { status, body } = await request(server).get('/status')
@@ -31,10 +34,13 @@ describe('UptimeController', () => {
     })
 
     it('responds with uptime not found when no uptime created', async () => {
+      await UptimeTable.deleteMany({})
+      await CpfBlacklistTable.deleteMany({})
+
       const { status, body } = await request(server).get('/status')
 
-      expect(status).toBe(404)
-      expect(body).toMatchObject({ message: '"Uptime" not found' })
+      expect(status).toBe(400)
+      expect(body).toBe('Uptime não iniciado!')
     })
   })
 })

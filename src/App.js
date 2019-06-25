@@ -5,7 +5,7 @@ const morgan = require('morgan')
 const Youch = require('youch')
 const cors = require('cors')
 
-const { RecordNotFoundError, RecordInvalidError } = require('./app/exceptions')
+const { RecordInvalidError } = require('./app/exceptions')
 const { Uptime } = require('./app/models')
 
 class App {
@@ -24,10 +24,15 @@ class App {
 
   database () {
     const { connection, options, message } = require('./config/database')
-    mongoose
-      .connect(connection, options)
-      .then(message.success)
-      .catch(message.failure)
+
+    if (this.env() === 'test') {
+      mongoose.connect(connection, options)
+    } else {
+      mongoose
+        .connect(connection, options)
+        .then(message.success)
+        .catch(message.failure)
+    }
 
     Uptime.create()
   }
@@ -48,7 +53,6 @@ class App {
 
   exception () {
     this.express.use(async (err, req, res, next) => {
-      if (err instanceof RecordNotFoundError) return res.status(404).json(err)
       if (err instanceof RecordInvalidError) return res.status(400).json(err)
 
       if (this.env() !== 'production') {

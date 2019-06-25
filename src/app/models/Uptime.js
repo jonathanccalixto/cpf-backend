@@ -1,23 +1,20 @@
 const mongoose = require('mongoose')
 
 const { UptimeSchema, CpfBlacklistSchema } = require('../../db/schemas')
-const { RecordInvalidError, RecordNotFoundError } = require('../exceptions')
+const { RecordInvalidError } = require('../exceptions')
 
 const CpfBlacklistTable = mongoose.model('CpfBlacklist', CpfBlacklistSchema)
 const UptimeTable = mongoose.model('Uptime', UptimeSchema)
 
-const throwsRecordInvalidError = ({ message, fields }) => {
-  throw new RecordInvalidError(message, fields)
-}
-const throwsRecordNotFoundError = ({ message }) => {
-  throw new RecordNotFoundError(message)
+const throwsRecordInvalidError = (message) => {
+  throw new RecordInvalidError(message)
 }
 
 const getInstance = async () => {
   let instance = await UptimeTable.findOne().sort('-createdAt')
 
   if (!instance) {
-    throwsRecordNotFoundError({ message: '"Uptime" not found' })
+    throwsRecordInvalidError('Uptime não iniciado!')
   }
 
   return instance
@@ -44,7 +41,7 @@ module.exports = {
     const instance = await getInstance()
 
     if (instance.blacklists === 0) {
-      throwsRecordInvalidError({ fields: 'No blacklist registered' })
+      throwsRecordInvalidError('Nenhum registro na blacklist!')
     }
 
     instance.blacklists -= 1

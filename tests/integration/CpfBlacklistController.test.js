@@ -47,7 +47,7 @@ describe('CpfBlacklistController', () => {
       expect(body).toBe('BLOCK')
     })
 
-    it('responds with invalid cpf when sending an invalid cpf', async () => {
+    it('responds with error message when cpf is invalid', async () => {
       const cpf = '638.174.677-71'
 
       const { status, body } = await request(server)
@@ -55,20 +55,14 @@ describe('CpfBlacklistController', () => {
         .query({ cpf })
 
       expect(status).toBe(400)
-      expect(body).toMatchObject({
-        message: 'One or more validation errors occurred:',
-        fields: ['"cpf" is invalid']
-      })
+      expect(body).toBe('CPF inválido')
     })
 
-    it('responds with cpf not allowed when not sending cpf', async () => {
+    it('responds with error message when not cpf informed', async () => {
       const { status, body } = await request(server).get('/cpf/status')
 
       expect(status).toBe(400)
-      expect(body).toMatchObject({
-        message: 'One or more validation errors occurred:',
-        fields: ['"cpf" is not allowed to be empty']
-      })
+      expect(body).toBe('CPF deve ser informado!')
     })
   })
 
@@ -107,13 +101,10 @@ describe('CpfBlacklistController', () => {
         .send({ cpf })
 
       expect(status).toBe(400)
-      expect(body).toMatchObject({
-        message: 'One or more validation errors occurred:',
-        fields: ['"cpf" was added in blacklist']
-      })
+      expect(body).toBe('CPF já adicionado a blacklist!')
     })
 
-    it('responds with invalid cpf when cpf is valid and blacklisted', async () => {
+    it('responds with error message when cpf is invalid', async () => {
       const cpf = '638.174.677-71'
 
       const { status, body } = await request(server)
@@ -121,20 +112,14 @@ describe('CpfBlacklistController', () => {
         .send({ cpf })
 
       expect(status).toBe(400)
-      expect(body).toMatchObject({
-        message: 'One or more validation errors occurred:',
-        fields: ['"cpf" is invalid']
-      })
+      expect(body).toBe('CPF inválido')
     })
 
-    it('responds with cpf not allowed when cpf is valid and blacklisted', async () => {
+    it('responds with error message when not cpf informed', async () => {
       const { status, body } = await request(server).post('/cpf/add')
 
       expect(status).toBe(400)
-      expect(body).toMatchObject({
-        message: 'One or more validation errors occurred:',
-        fields: ['"cpf" is not allowed to be empty']
-      })
+      expect(body).toBe('CPF deve ser informado!')
     })
   })
 
@@ -161,10 +146,7 @@ describe('CpfBlacklistController', () => {
         .send({ cpf })
 
       expect(status).toBe(400)
-      expect(body).toMatchObject({
-        message: 'One or more validation errors occurred:',
-        fields: ['"cpf" was not added in blacklist']
-      })
+      expect(body).toBe('CPF não está na blacklist')
     })
 
     it('responds with cpf already added when cpf is valid and was blacklisted', async () => {
@@ -178,13 +160,10 @@ describe('CpfBlacklistController', () => {
         .send({ cpf })
 
       expect(status).toBe(400)
-      expect(body).toMatchObject({
-        message: 'One or more validation errors occurred:',
-        fields: ['"cpf" was not added in blacklist']
-      })
+      expect(body).toBe('CPF não está na blacklist')
     })
 
-    it('responds with invalid cpf when cpf is valid and blacklisted', async () => {
+    it('responds with error message when cpf is invalid', async () => {
       const cpf = '638.174.677-71'
 
       const { status, body } = await request(server)
@@ -192,20 +171,14 @@ describe('CpfBlacklistController', () => {
         .send({ cpf })
 
       expect(status).toBe(400)
-      expect(body).toMatchObject({
-        message: 'One or more validation errors occurred:',
-        fields: ['"cpf" is invalid']
-      })
+      expect(body).toBe('CPF inválido')
     })
 
-    it('responds with cpf not allowed when cpf is valid and blacklisted', async () => {
+    it('responds with error message when not cpf informed', async () => {
       const { status, body } = await request(server).delete('/cpf/remove')
 
       expect(status).toBe(400)
-      expect(body).toMatchObject({
-        message: 'One or more validation errors occurred:',
-        fields: ['"cpf" is not allowed to be empty']
-      })
+      expect(body).toBe('CPF deve ser informado!')
     })
   })
 })
